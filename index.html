@@ -773,6 +773,49 @@ html,body{font:11pt/1.4 Arial,sans-serif!important;background:#fff!important;col
 .guide-authorship{margin-top:1.4rem;padding-top:.8rem;border-top:1px solid #d9cec8;font-size:.8rem;color:#655869;}
 
 @media screen{.foot{justify-content:space-between;align-items:center;gap:1rem}#progress{display:block!important;font:400 .7rem/1.3 Atkinson,sans-serif;color:#655869;margin:0 auto 0 0;letter-spacing:.01em}.farewell-signature{display:none}}
+
+/* Contraste uniforme: incluye el lienzo, la barra superior y los formularios. */
+@media screen{
+ body[data-contrast="dark"]{--hc-bg:#000;--hc-fg:#fff;--paper:#000;--panel:#000;--ink:#fff;--muted:#fff;--line:#fff;color-scheme:dark}
+ body[data-contrast="light"]{--hc-bg:#fff;--hc-fg:#000;--paper:#fff;--panel:#fff;--ink:#000;--muted:#000;--line:#000;color-scheme:light}
+ body[data-contrast="dark"],body[data-contrast="light"],
+ body[data-contrast="dark"] *,body[data-contrast="light"] *,
+ body[data-contrast="dark"] #screen,body[data-contrast="light"] #screen,
+ body[data-contrast="dark"] #screen *,body[data-contrast="light"] #screen *{
+  background:var(--hc-bg)!important;color:var(--hc-fg)!important;
+  border-color:var(--hc-fg)!important;box-shadow:none!important;text-shadow:none!important;
+ }
+ body[data-contrast="dark"] .common-bar *,body[data-contrast="light"] .common-bar *{
+  color:var(--hc-fg)!important;background:var(--hc-bg)!important;
+ }
+ body[data-contrast="dark"] button,body[data-contrast="light"] button,
+ body[data-contrast="dark"] select,body[data-contrast="light"] select,
+ body[data-contrast="dark"] input,body[data-contrast="light"] input,
+ body[data-contrast="dark"] textarea,body[data-contrast="light"] textarea{
+  color:var(--hc-fg)!important;background:var(--hc-bg)!important;
+  border:1px solid var(--hc-fg)!important;accent-color:var(--hc-fg);
+ }
+ body[data-contrast="dark"] .common-bar #stop:disabled,
+ body[data-contrast="light"] .common-bar #stop:disabled{opacity:.65!important}
+ body[data-contrast="dark"] :focus-visible,body[data-contrast="light"] :focus-visible{
+  outline:3px solid var(--hc-fg)!important;outline-offset:4px!important;
+ }
+ body[data-contrast="dark"] #screen label:has(input:checked),
+ body[data-contrast="light"] #screen label:has(input:checked){
+  outline:3px solid var(--hc-fg)!important;outline-offset:3px!important;
+ }
+ body[data-contrast="dark"] .border-garden,body[data-contrast="light"] .border-garden,
+ body[data-contrast="dark"] .garden-mask,body[data-contrast="light"] .garden-mask,
+ body[data-contrast="dark"] .review-botanical-frame,body[data-contrast="light"] .review-botanical-frame,
+ body[data-contrast="dark"] .farewell-botanical,body[data-contrast="light"] .farewell-botanical,
+ body[data-contrast="dark"] .farewell-bottom-botanical,body[data-contrast="light"] .farewell-bottom-botanical{display:none!important}
+ body[data-contrast="dark"] main::before,body[data-contrast="dark"] main::after,
+ body[data-contrast="light"] main::before,body[data-contrast="light"] main::after,
+ body[data-contrast="dark"] #screen::before,body[data-contrast="dark"] #screen::after,
+ body[data-contrast="light"] #screen::before,body[data-contrast="light"] #screen::after,
+ body[data-contrast="dark"] #screen *::before,body[data-contrast="dark"] #screen *::after,
+ body[data-contrast="light"] #screen *::before,body[data-contrast="light"] #screen *::after{display:none!important;content:none!important}
+}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500&amp;display=swap">
 </head>
