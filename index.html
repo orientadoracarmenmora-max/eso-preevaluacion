@@ -816,6 +816,15 @@ html,body{font:11pt/1.4 Arial,sans-serif!important;background:#fff!important;col
  body[data-contrast="dark"] #screen *::before,body[data-contrast="dark"] #screen *::after,
  body[data-contrast="light"] #screen *::before,body[data-contrast="light"] #screen *::after{display:none!important;content:none!important}
 }
+
+@media screen{
+ body.contraste[data-contrast] #screen > .slide[data-page],
+ body.contraste[data-contrast] #screen > .slide[data-page] *{
+  background:var(--hc-bg)!important;color:var(--hc-fg)!important;border-color:var(--hc-fg)!important;
+  box-shadow:none!important;text-shadow:none!important;animation:none!important;transition:none!important;
+ }
+ body.contraste[data-contrast] main.wrap{background:var(--hc-bg)!important}
+}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500&amp;display=swap">
 </head>
