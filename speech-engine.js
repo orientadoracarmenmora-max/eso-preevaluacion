@@ -6,7 +6,12 @@ function createPresentationReader({voiceSelect,speedSelect,status,busy,progress,
  let phononPlayback;
  let worker,audio,source,ready=false,loading=false,failed=false,run=0,serial=0,nativeActive=false;
  const jobs=new Map();let voices=[];let preferred='';try{preferred=localStorage.getItem('preeval-reader-voice')||'';}catch{}
- function nativeVoices(){voices=synth?.getVoices().filter(v=>/^es(?:[-_]|$)/i.test(v.lang))||[];return {google:voices.find(v=>/google/i.test(v.name)&&/^es[-_]ES$/i.test(v.lang))||voices.find(v=>/google/i.test(v.name)),device:voices.find(v=>/m[oó]nica/i.test(v.name))||voices.find(v=>v.localService&&v.default)||voices.find(v=>v.localService)||voices[0]};}
+ function isSpanishVoice(voice){
+ return /^es(?:[-_]|$)/i.test(voice.lang)
+   && !/(?:^|[-_])mx(?:[-_]|$)/i.test(voice.lang)
+   && !/\bm[eé]xic[oa]s?\b/i.test(voice.name);
+ }
+ function nativeVoices(){voices=synth?.getVoices().filter(isSpanishVoice)||[];return {google:voices.find(v=>/google/i.test(v.name)&&/^es[-_]ES$/i.test(v.lang))||voices.find(v=>/google/i.test(v.name)),device:voices.find(v=>/m[oó]nica/i.test(v.name))||voices.find(v=>v.localService&&v.default)||voices.find(v=>v.localService)||voices[0]};}
  function refresh(){const selected=preferred;const {google,device}=nativeVoices();
  voiceSelect.replaceChildren(new Option(google?'Automática · Google Español':'Automática · Noa',''));
  const g=new Option(google?'Google Español':'Google Español · No disponible','google');g.disabled=!google;voiceSelect.add(g);
