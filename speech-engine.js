@@ -13,15 +13,15 @@ function createPresentationReader({voiceSelect,speedSelect,status,busy,progress,
  }
  function nativeVoices(){voices=synth?.getVoices().filter(isSpanishVoice)||[];return {google:voices.find(v=>/google/i.test(v.name)&&/^es[-_]ES$/i.test(v.lang))||voices.find(v=>/google/i.test(v.name)),device:voices.find(v=>/m[oó]nica/i.test(v.name))||voices.find(v=>v.localService&&v.default)||voices.find(v=>v.localService)||voices[0]};}
  function refresh(){const selected=preferred;const {google,device}=nativeVoices();
- voiceSelect.replaceChildren(new Option(google?'Automática · Google Español':'Automática · Noa',''));
- const g=new Option(google?'Google Español':'Google Español · No disponible','google');g.disabled=!google;voiceSelect.add(g);
+ const g=new Option('Google Español (en Chrome)','google');g.disabled=!google;voiceSelect.replaceChildren(g);
  const phononOptions=document.createElement('optgroup');phononOptions.label='Phonon · Español de España';
  Object.keys(PHONON_VOICES).forEach(name=>phononOptions.append(new Option(name,'phonon:'+name)));
  voiceSelect.add(phononOptions);
  const p=new Option('Piper Sharvard · Segunda voz'+(ready?' · Lista':loading?' · Cargando':failed?' · No disponible':''),'piper');p.disabled=failed;voiceSelect.add(p);
  voiceSelect.add(new Option(device?'Dispositivo · '+device.name:'Voz del dispositivo','device'));
  voices.filter(v=>v!==google&&v!==device).forEach(v=>voiceSelect.add(new Option(v.name+' · '+v.lang,v.voiceURI)));
- if([...voiceSelect.options].some(o=>o.value===selected&&!o.disabled))voiceSelect.value=selected;
+ voiceSelect.value=[...voiceSelect.options].some(o=>o.value===selected&&!o.disabled) ? selected
+   : google && /(?:Chrome|CriOS)\//.test(navigator.userAgent) && !/(?:Edg|OPR|SamsungBrowser)\//.test(navigator.userAgent) ? 'google' : 'phonon:Noa';
  }
  function failure(error){failed=true;loading=false;ready=false;progress.hidden=true;progressLabel.textContent='Piper no disponible; se usará la voz del dispositivo.';for(const j of jobs.values()){clearTimeout(j.timer);j.reject(error);}jobs.clear();worker?.terminate();worker=null;refresh();}
  function ensureWorker(){if(worker)return;worker=new Worker(URL.createObjectURL(new Blob([PIPER_WORKER_SOURCE],{type:'text/javascript'})));
@@ -59,8 +59,7 @@ function createPresentationReader({voiceSelect,speedSelect,status,busy,progress,
  voiceSelect.addEventListener('change',()=>{preferred=voiceSelect.value;try{localStorage.setItem('preeval-reader-voice',preferred);}catch{}stop();if(preferred==='piper')preload();
  if(preferred.startsWith('phonon:'))void phonon.preload().catch(()=>{});});
  function warmDefault(){
- const {google}=nativeVoices();
- if ((!preferred&&!google)||preferred.startsWith('phonon:'))void phonon.preload().catch(()=>{});
+ if (voiceSelect.value.startsWith('phonon:'))void phonon.preload().catch(()=>{});
  }
  synth?.addEventListener('voiceschanged',refresh);
  refresh();
