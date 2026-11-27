@@ -45,9 +45,8 @@ function createPresentationReader({voiceSelect,speedSelect,status,busy,progress,
  const paragraphs=text.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
  busy(true);try{
  if(phononVoice){
- const playback=new AbortController();phononPlayback=playback;status('Leyendo con '+phononVoice+'…');
+ const playback=new AbortController();phononPlayback=playback;status('');
  await phonon.play(text,phononVoice,Number(speedSelect.value)||1,playback.signal);
- if(id===run)status('Lectura terminada');
  }else if(usePiper){audio||=new Audio();await audio.resume();status('');for(let paragraphIndex=0;paragraphIndex<paragraphs.length;paragraphIndex++){if(id!==run)return;const data=await request({text:paragraphs[paragraphIndex],speed:Number(speedSelect.value)||1,pauseSeconds:trafficPauses?0.55:0.35});if(id!==run)return;
  const buffer=audio.createBuffer(1,data.pcm.length,data.sampleRate);buffer.getChannelData(0).set(data.pcm);source=audio.createBufferSource();source.buffer=buffer;source.connect(audio.destination);status('');
  await new Promise(resolve=>{source.onended=()=>{source?.disconnect();source=null;resolve();};source.start();});
