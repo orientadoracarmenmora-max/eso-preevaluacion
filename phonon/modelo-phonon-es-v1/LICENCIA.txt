@@ -1,0 +1,5 @@
+Phonon 40m español, de Gradium.
+Origen: https://huggingface.co/gradium/phonon-40m-es
+Licencia Creative Commons Atribución-NoComercial 4.0 Internacional:
+https://creativecommons.org/licenses/by-nc/4.0/
+Estos tres archivos se incluyen sin modificaciones para la tutoría.

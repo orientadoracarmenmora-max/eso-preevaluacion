@@ -1,0 +1,3 @@
+Voces de español de España de Gradium (gradium/phonon-voices).
+Origen: https://huggingface.co/gradium/phonon-voices/tree/0ee1720
+Licencia del catálogo: Apache 2.0. Los archivos conservan su identificador oficial.
