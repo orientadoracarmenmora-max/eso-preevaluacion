@@ -844,8 +844,7 @@ html,body{font:11pt/1.4 Arial,sans-serif!important;background:#fff!important;col
 <h3>Después</h3><p>Tras la evaluación, acompaña al alumnado a comparar previsiones y notas, buscar cómo mejorar los resultados y revisar si se están aplicando los compromisos. En la siguiente preevaluación, recupera el acta y valora los avances con evidencias.</p>
 <h3>Lectura y accesibilidad</h3><p>«Escuchar» explica brevemente qué hacer en la pantalla. «Accesibilidad» permite cambiar tamaño, fuente y contraste, reducir animaciones y restablecer el diseño sin borrar las respuestas.</p>
 
-<p class="guide-authorship">Material elaborado por Carmen Martínez Mora · 2026</p>
-<section id="licencias-documento" aria-label="Licencias del material"><p>Material didáctico original de Carmen Martínez Mora · <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a>.</p><section class="phonon-credits" aria-label="Voces y licencias"><h3>Voces y licencias</h3><p><a href="https://huggingface.co/gradium/phonon-40m-es">Phonon 40M Español</a> de Gradium · versión Q8 · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.es">CC BY-NC 4.0</a> (uso no comercial).</p><p><a href="https://huggingface.co/gradium/phonon-voices">Catálogo de voces de Gradium</a> · <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.</p></section></section></div></details>
+<section id="licencias-documento" aria-label="Licencias del material"><p>Material didáctico original de Carmen Martínez Mora · <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a>.</p><section class="phonon-credits" aria-label="Voces y licencias"><p>Voces y licencias: <a href="https://huggingface.co/gradium/phonon-40m-es">Phonon 40M Español</a> de Gradium · versión Q8 · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.es">CC BY-NC 4.0</a> (uso no comercial). · <a href="https://huggingface.co/gradium/phonon-voices">Catálogo de voces de Gradium</a> · <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.</p></section></section></div></details>
 <button id="listen" type="button">▶ Escuchar</button><button id="stop" type="button" disabled>■ Detener</button>
 <details id="voice-menu"><summary>Elegir voz y velocidad</summary><div class="voice-panel menu-panel"><label>Voz <select id="voice"></select></label><div class="piper-loading"><progress id="piper-progress" max="100" hidden aria-label="Carga de la voz"></progress><small id="piper-loading-label" role="status"></small></div><label>Velocidad <select id="speed"><option value=".65">Muy pausada</option><option value=".9">Tranquila</option><option value="1" selected>Normal</option><option value="1.15">Más rápida</option></select></label><button id="test-voice" type="button">Probar voz en esta diapositiva</button></div></details>
 <details id="index-menu"><summary>Índice</summary><nav class="steps menu-panel" id="steps" aria-label="Pantallas de la tutoría"></nav></details>
@@ -1296,7 +1295,99 @@ root.PreevalPDF={fromActa,fromReflection,actaFromData,reflectionFromData,downloa
 
 
 </script>
-<script src="phonon-reader.js?v=20261127"></script>
+<script>
+'use strict';
+
+const PHONON_VOICES = {
+  "Nerea": "./phonon/voces/EQcQFGkYfMn5YJgx.safetensors",
+  "Guillermo": "./phonon/voces/FaLVVqpFQcDOtq45.safetensors",
+  "Noa": "./phonon/voces/b6FvJAiokjdqIti4.safetensors",
+  "Borja": "./phonon/voces/tIjCgP8v3RY8UpgM.safetensors",
+  "Candela": "./phonon/voces/c9wqBDmQiBie5q6Y.safetensors",
+  "Marcos": "./phonon/voces/jvPx8j8zLGQ3utZz.safetensors",
+  "Celia": "./phonon/voces/rmLBOdHrfkFym9MM.safetensors",
+  "Iker": "./phonon/voces/t-_TS1e-0GzDAX02.safetensors",
+  "Alba": "./phonon/voces/u2UscyAnHilpiwmf.safetensors",
+  "Nuno": "./phonon/voces/fghJGlv90qu8OJ36.safetensors",
+  "Alicia": "./phonon/voces/4701YgRXjkBcg6sL.safetensors",
+  "Izan": "./phonon/voces/Ejb29qHnSOK0cIHY.safetensors"
+};
+
+function createPhononReader({progress, report}) {
+  let modelPromise;
+
+  function preload() {
+    if (modelPromise) return modelPromise;
+    progress.hidden = false;
+    progress.removeAttribute('value');
+    report('Preparando las voces de Phonon…');
+    modelPromise = import('./phonon/motor/index.js').then(({PhononTTS}) => PhononTTS.load({
+      lang: 'es', quant: 'q8', device: 'cpu', threads: 1,
+      model: {
+        config: './phonon/modelo-phonon-es-v1/config.json',
+        tokenizer: './phonon/modelo-phonon-es-v1/tokenizer.json',
+        weights: {q8: './phonon/modelo-phonon-es-v1/model.q8.gguf'},
+        voices: PHONON_VOICES, defaultVoice: 'Nerea'
+      },
+      onProgress({file, total, loaded}) {
+        if (file === 'weights' && total) progress.value = (loaded / total) * 100;
+      }
+    })).then(model => {
+      report('Voces de Phonon listas.');
+      return model;
+    }).catch(error => {
+      console.warn('Phonon:', error);
+      report('Phonon no disponible. Puedes elegir una voz del dispositivo.');
+      modelPromise = undefined;
+      throw error;
+    }).finally(() => {
+      progress.hidden = true;
+    });
+    return modelPromise;
+  }
+
+  async function play(text, voice, speed, signal) {
+    const Audio = window.AudioContext || window.webkitAudioContext;
+    const audio = new Audio();
+    const close = () => { if (audio.state !== 'closed') void audio.close().catch(() => {}); };
+    let resolveAbort;
+    const cancelled = new Promise(resolve => { resolveAbort = resolve; });
+    const onAbort = () => { close(); resolveAbort(); };
+    signal.addEventListener('abort', onAbort, {once: true});
+    try {
+      const [model] = await Promise.all([preload(), audio.resume()]);
+      if (signal.aborted) return;
+      const stream = model.stream(text, {voice, signal});
+      void stream.done.catch(() => {});
+      let end = 0;
+      let last;
+      for await (const pcm of stream) {
+        if (signal.aborted) return;
+        const buffer = audio.createBuffer(1, pcm.length, model.sampleRate);
+        buffer.copyToChannel(pcm, 0);
+        const node = audio.createBufferSource();
+        node.buffer = buffer;
+        node.playbackRate.value = speed;
+        node.connect(audio.destination);
+        end = Math.max(end, audio.currentTime + 0.035);
+        last = new Promise(resolve => { node.onended = resolve; });
+        node.start(end);
+        end += buffer.duration / speed;
+      }
+      await stream.done;
+      if (signal.aborted) return;
+      if (!last) throw new Error('Phonon no generó audio.');
+      await Promise.race([last, cancelled]);
+    } finally {
+      signal.removeEventListener('abort', onAbort);
+      close();
+    }
+  }
+
+  return {preload, play};
+}
+
+</script>
 <script src="speech-engine.js?v=20261127-4"></script>
 <script>
 'use strict';
