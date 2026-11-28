@@ -830,7 +830,7 @@ html,body{font:11pt/1.4 Arial,sans-serif!important;background:#fff!important;col
 <style id="phonon-credits-style">.info-access-row{display:inline-flex;align-items:center;gap:.35rem;flex:none;max-width:100%}.info-access-row>.phonon-info-trigger{flex:none;min-width:2.15rem;padding:.3rem;border-radius:50%;aspect-ratio:1}.phonon-info-dialog{max-width:min(34rem,calc(100% - 2rem));max-height:85vh;overflow:auto;color:CanvasText;background:Canvas;border:1px solid currentColor;border-radius:1rem;padding:1.1rem}.phonon-info-dialog::backdrop{background:#0007}</style></head>
 <body>
 <header class="common-header"><div class="wrap"><div class="common-bar"><details id="teacher-guide" class="teacher-guide"><summary aria-label="Información de la presentación">i</summary><div class="teacher-guide-panel">
-<p><a href="#licencias-documento">Voces y licencias</a></p>
+
 
 <h2>Tutoría · 55 minutos</h2>
 <p>Esta tutoría prepara la primera evaluación. Para la actividad individual, el alumnado puede completar una copia impresa de la hoja que se muestra en la pizarra digital o copiar la tabla en su cuaderno y rellenarla allí.</p>
@@ -845,7 +845,7 @@ html,body{font:11pt/1.4 Arial,sans-serif!important;background:#fff!important;col
 <h3>Lectura y accesibilidad</h3><p>«Escuchar» explica brevemente qué hacer en la pantalla. «Accesibilidad» permite cambiar tamaño, fuente y contraste, reducir animaciones y restablecer el diseño sin borrar las respuestas.</p>
 
 <p class="guide-authorship">Material elaborado por Carmen Martínez Mora · 2026</p>
-</div></details>
+<section id="licencias-documento" aria-label="Licencias del material"><p>Material didáctico original de Carmen Martínez Mora · <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a>.</p><section class="phonon-credits" aria-label="Voces y licencias"><h3>Voces y licencias</h3><p><a href="https://huggingface.co/gradium/phonon-40m-es">Phonon 40M Español</a> de Gradium · versión Q8 · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.es">CC BY-NC 4.0</a> (uso no comercial).</p><p><a href="https://huggingface.co/gradium/phonon-voices">Catálogo de voces de Gradium</a> · <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.</p></section></section></div></details>
 <button id="listen" type="button">▶ Escuchar</button><button id="stop" type="button" disabled>■ Detener</button>
 <details id="voice-menu"><summary>Elegir voz y velocidad</summary><div class="voice-panel menu-panel"><label>Voz <select id="voice"></select></label><div class="piper-loading"><progress id="piper-progress" max="100" hidden aria-label="Carga de la voz"></progress><small id="piper-loading-label" role="status"></small></div><label>Velocidad <select id="speed"><option value=".65">Muy pausada</option><option value=".9">Tranquila</option><option value="1" selected>Normal</option><option value="1.15">Más rápida</option></select></label><button id="test-voice" type="button">Probar voz en esta diapositiva</button></div></details>
 <details id="index-menu"><summary>Índice</summary><nav class="steps menu-panel" id="steps" aria-label="Pantallas de la tutoría"></nav></details>
@@ -1783,7 +1783,7 @@ window.addEventListener('beforeprint',updatePrint);
 applyPreferences();
 render();
 </script>
-<footer id="licencias-documento" class="wrap"><p>Material didáctico original de Carmen Martínez Mora · <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">CC BY-NC-ND 4.0</a>.</p><section class="phonon-credits" aria-label="Voces y licencias"><h3>Voces y licencias</h3><p><a href="https://huggingface.co/gradium/phonon-40m-es">Phonon 40M Español</a> de Gradium · versión Q8 · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.es">CC BY-NC 4.0</a> (uso no comercial).</p><p><a href="https://huggingface.co/gradium/phonon-voices">Catálogo de voces de Gradium</a> · <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.</p></section></footer>
+
 </body>
 <!-- Licencias de las fuentes incrustadas
 Dekko
